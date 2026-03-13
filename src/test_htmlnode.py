@@ -13,7 +13,11 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(node.props_to_html(), ' href="https://example.com"')
 
     def test_props_multiple(self):
-        node = HTMLNode(tag="a", value="Link", props={"href": "https://example.com", "target": "_blank"})
+        node = HTMLNode(
+            tag="a",
+            value="Link",
+            props={"href": "https://example.com", "target": "_blank"},
+        )
         # Order should follow insertion order of dict; compare sets of substrings to be order-agnostic
         html = node.props_to_html()
         self.assertIn(' href="https://example.com"', html)
@@ -27,7 +31,9 @@ class TestLeafNode(unittest.TestCase):
 
     def test_leaf_to_html_a_with_props(self):
         node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-        self.assertEqual(node.to_html(), '<a href="https://www.google.com">Click me!</a>')
+        self.assertEqual(
+            node.to_html(), '<a href="https://www.google.com">Click me!</a>'
+        )
 
     def test_leaf_value_required(self):
         node = LeafNode("p", None)
@@ -73,7 +79,10 @@ class TestParentNode(unittest.TestCase):
                 LeafNode(None, "Normal text"),
             ],
         )
-        self.assertEqual(node.to_html(), "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>")
+        self.assertEqual(
+            node.to_html(),
+            "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>",
+        )
 
 
 if __name__ == "__main__":

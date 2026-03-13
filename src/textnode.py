@@ -24,13 +24,14 @@ class TextNode:
         if not isinstance(other, TextNode):
             return False
         return (
-            self.text == other.text and
-            self.text_type == other.text_type and
-            self.url == other.url       
+            self.text == other.text
+            and self.text_type == other.text_type
+            and self.url == other.url
         )
+
     def __repr__(self):
         return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
-    
+
 
 def text_node_to_html_node(text_node: TextNode):
     from htmlnode import LeafNode
@@ -114,7 +115,7 @@ def split_nodes_image(old_nodes):
     Looks for patterns like: ![alt](url)
     """
     new_nodes = []
-    pattern = re.compile(r'!\[([^\]]*)\]\((.*?)\)')
+    pattern = re.compile(r"!\[([^\]]*)\]\((.*?)\)")
 
     for node in old_nodes:
         if not isinstance(node, TextNode) or node.text_type != TextType.TEXT:
@@ -127,7 +128,7 @@ def split_nodes_image(old_nodes):
         for m in pattern.finditer(text):
             found = True
             if m.start() > last:
-                new_nodes.append(TextNode(text[last:m.start()], TextType.TEXT))
+                new_nodes.append(TextNode(text[last : m.start()], TextType.TEXT))
             alt = m.group(1)
             url = m.group(2)
             new_nodes.append(TextNode(alt, TextType.IMAGE, url))
@@ -148,7 +149,7 @@ def split_nodes_link(old_nodes):
     Looks for patterns like: [anchor](url) but does not match images.
     """
     new_nodes = []
-    pattern = re.compile(r'(?<!\!)\[([^\]]+)\]\((.*?)\)')
+    pattern = re.compile(r"(?<!\!)\[([^\]]+)\]\((.*?)\)")
 
     for node in old_nodes:
         if not isinstance(node, TextNode) or node.text_type != TextType.TEXT:
@@ -161,7 +162,7 @@ def split_nodes_link(old_nodes):
         for m in pattern.finditer(text):
             found = True
             if m.start() > last:
-                new_nodes.append(TextNode(text[last:m.start()], TextType.TEXT))
+                new_nodes.append(TextNode(text[last : m.start()], TextType.TEXT))
             anchor = m.group(1)
             url = m.group(2)
             new_nodes.append(TextNode(anchor, TextType.LINK, url))
@@ -193,7 +194,3 @@ def text_to_textnodes(text: str):
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
 
     return nodes
-
-
-
-

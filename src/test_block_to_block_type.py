@@ -5,8 +5,8 @@ from markdown_utils import BlockType, block_to_block_type
 
 class TestBlockToBlockType(unittest.TestCase):
     def test_heading_levels(self):
-        self.assertEqual(block_to_block_type('# Heading'), BlockType.HEADING)
-        self.assertEqual(block_to_block_type('###### Small'), BlockType.HEADING)
+        self.assertEqual(block_to_block_type("# Heading"), BlockType.HEADING)
+        self.assertEqual(block_to_block_type("###### Small"), BlockType.HEADING)
 
     def test_code_block(self):
         md = "```\nprint('hi')\n```"
@@ -38,8 +38,8 @@ class TestBlockToBlockType(unittest.TestCase):
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_empty_block(self):
-        self.assertEqual(block_to_block_type(''), BlockType.PARAGRAPH)
+        self.assertEqual(block_to_block_type(""), BlockType.PARAGRAPH)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

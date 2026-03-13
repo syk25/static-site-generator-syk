@@ -27,7 +27,7 @@ This is the same paragraph on a new line
     def test_trims_and_removes_empty(self):
         md = "\n\n  a block  \n\n\n   \n b\n\n"
         blocks = markdown_to_blocks(md)
-        self.assertEqual(blocks, ["a block", "b"])  
+        self.assertEqual(blocks, ["a block", "b"])
 
 
 if __name__ == "__main__":

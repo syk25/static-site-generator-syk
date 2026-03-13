@@ -12,15 +12,20 @@ class TestMarkdownExtractors(unittest.TestCase):
     def test_multiple_images(self):
         text = "Here ![a](http://x/a.png) and ![b](http://x/b.jpg)"
         matches = extract_markdown_images(text)
-        self.assertListEqual([("a", "http://x/a.png"), ("b", "http://x/b.jpg")], matches)
+        self.assertListEqual(
+            [("a", "http://x/a.png"), ("b", "http://x/b.jpg")], matches
+        )
 
     def test_extract_markdown_links(self):
         text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
         matches = extract_markdown_links(text)
-        self.assertListEqual([
-            ("to boot dev", "https://www.boot.dev"),
-            ("to youtube", "https://www.youtube.com/@bootdotdev"),
-        ], matches)
+        self.assertListEqual(
+            [
+                ("to boot dev", "https://www.boot.dev"),
+                ("to youtube", "https://www.youtube.com/@bootdotdev"),
+            ],
+            matches,
+        )
 
     def test_links_do_not_match_images(self):
         text = "Mix ![img](http://x/i.png) and [link](http://x)"

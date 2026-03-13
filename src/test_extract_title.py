@@ -21,5 +21,5 @@ Some paragraph
             extract_title("## Not h1\n#NoSpace\nNo header here")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

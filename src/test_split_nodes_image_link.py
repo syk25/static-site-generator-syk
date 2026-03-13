@@ -15,7 +15,9 @@ class TestSplitNodesImageLink(unittest.TestCase):
                 TextNode("This is text with an ", TextType.TEXT),
                 TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
                 TextNode(" and another ", TextType.TEXT),
-                TextNode("second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"),
+                TextNode(
+                    "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
+                ),
             ],
             new_nodes,
         )
@@ -31,7 +33,9 @@ class TestSplitNodesImageLink(unittest.TestCase):
                 TextNode("This is text with a link ", TextType.TEXT),
                 TextNode("to boot dev", TextType.LINK, "https://www.boot.dev"),
                 TextNode(" and ", TextType.TEXT),
-                TextNode("to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"),
+                TextNode(
+                    "to youtube", TextType.LINK, "https://www.youtube.com/@bootdotdev"
+                ),
             ],
             new_nodes,
         )

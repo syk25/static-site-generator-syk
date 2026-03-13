@@ -15,14 +15,18 @@ class TestTextToTextNodes(unittest.TestCase):
             TextNode(" word and a ", TextType.TEXT),
             TextNode("code block", TextType.CODE),
             TextNode(" and an ", TextType.TEXT),
-            TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(
+                "obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"
+            ),
             TextNode(" and a ", TextType.TEXT),
             TextNode("link", TextType.LINK, "https://boot.dev"),
         ]
         self.assertListEqual(expected, nodes)
 
     def test_only_text(self):
-        self.assertListEqual([TextNode("hello", TextType.TEXT)], text_to_textnodes("hello"))
+        self.assertListEqual(
+            [TextNode("hello", TextType.TEXT)], text_to_textnodes("hello")
+        )
 
     def test_ordering(self):
         # ensure processing images then links then formatting works

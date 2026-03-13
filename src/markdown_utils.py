@@ -11,7 +11,7 @@ def extract_markdown_images(text: str) -> List[Tuple[str, str]]:
 
     Matches patterns like: ![alt text](http://example.com/image.png)
     """
-    pattern = re.compile(r'!\[([^\]]*)\]\((.*?)\)')
+    pattern = re.compile(r"!\[([^\]]*)\]\((.*?)\)")
     return pattern.findall(text)
 
 
@@ -21,7 +21,7 @@ def extract_markdown_links(text: str) -> List[Tuple[str, str]]:
     Matches patterns like: [link text](http://example.com). Does not
     include image syntax (which starts with '!').
     """
-    pattern = re.compile(r'(?<!\!)\[([^\]]+)\]\((.*?)\)')
+    pattern = re.compile(r"(?<!\!)\[([^\]]+)\]\((.*?)\)")
     return pattern.findall(text)
 
 
@@ -55,25 +55,25 @@ def block_to_block_type(block: str) -> BlockType:
         return BlockType.PARAGRAPH
 
     # Heading: starts with 1-6 '#' followed by a space
-    if re.match(r'^#{1,6} ', block):
+    if re.match(r"^#{1,6} ", block):
         return BlockType.HEADING
 
     # Multiline code block: starts with ```\n and ends with ```
-    if block.startswith('```\n') and block.rstrip().endswith('```'):
+    if block.startswith("```\n") and block.rstrip().endswith("```"):
         return BlockType.CODE_BLOCK
 
-    lines = block.split('\n')
+    lines = block.split("\n")
 
     # Quote block: every line starts with '>'
-    if all(line.startswith('>') for line in lines):
+    if all(line.startswith(">") for line in lines):
         return BlockType.QUOTE
 
     # Unordered list: every line starts with '- '
-    if all(line.startswith('- ') for line in lines):
+    if all(line.startswith("- ") for line in lines):
         return BlockType.UNORDERED_LIST
 
     # Ordered list: every line starts with a number and '. ', and numbers start at 1 and increment
-    ol_match = [re.match(r'^(\d+)\. ', line) for line in lines]
+    ol_match = [re.match(r"^(\d+)\. ", line) for line in lines]
     if all(m is not None for m in ol_match):
         nums = [int(m.group(1)) for m in ol_match]
         # must start at 1 and increment by 1
@@ -91,7 +91,7 @@ def extract_title(markdown: str) -> str:
     ValueError if no H1 is found.
     """
     for line in markdown.splitlines():
-        m = re.match(r'^#\s+(.*)$', line)
+        m = re.match(r"^#\s+(.*)$", line)
         if m:
             return m.group(1).strip()
     raise ValueError("No H1 title found in markdown")
@@ -123,43 +123,47 @@ def markdown_to_html_node(markdown: str) -> ParentNode:
         btype = block_to_block_type(block)
 
         if btype == BlockType.HEADING:
-            m = re.match(r'^(#{1,6})\s+(.*)', block)
+            m = re.match(r"^(#{1,6})\s+(.*)", block)
             level = len(m.group(1))
-            text = m.group(2).replace('\n', ' ')
-            block_nodes.append(ParentNode(f'h{level}', text_to_children(text)))
+            text = m.group(2).replace("\n", " ")
+            block_nodes.append(ParentNode(f"h{level}", text_to_children(text)))
 
         elif btype == BlockType.CODE_BLOCK:
             # keep raw content between the triple backticks, including final newline
-            if block.startswith('```') and block.endswith('```'):
+            if block.startswith("```") and block.endswith("```"):
                 # capture content between opening ```\n and closing ```
-                content = block[4:-3] if block.startswith('```\n') else block[3:-3]
+                content = block[4:-3] if block.startswith("```\n") else block[3:-3]
             else:
                 content = block
             # create <pre><code>content</code></pre>
             code_node = text_node_to_html_node(TextNode(content, TextType.CODE))
-            block_nodes.append(ParentNode('pre', [code_node]))
+            block_nodes.append(ParentNode("pre", [code_node]))
 
         elif btype == BlockType.QUOTE:
-            lines = block.split('\n')
-            cleaned = [re.sub(r'^>\s?', '', l) for l in lines]
+            lines = block.split("\n")
+            cleaned = [re.sub(r"^>\s?", "", l) for l in lines]
             # collapse intra-quote newlines into spaces
-            joined = ' '.join(cleaned)
+            joined = " ".join(cleaned)
             # render quote content directly inside blockquote (no inner <p>)
-            block_nodes.append(ParentNode('blockquote', text_to_children(joined)))
+            block_nodes.append(ParentNode("blockquote", text_to_children(joined)))
 
         elif btype == BlockType.UNORDERED_LIST:
-            items = [l[2:].replace('\n', ' ') for l in block.split('\n')]
-            lis = [ParentNode('li', text_to_children(item)) for item in items]
-            block_nodes.append(ParentNode('ul', lis))
+            items = [l[2:].replace("\n", " ") for l in block.split("\n")]
+            lis = [ParentNode("li", text_to_children(item)) for item in items]
+            block_nodes.append(ParentNode("ul", lis))
 
         elif btype == BlockType.ORDERED_LIST:
-            items = [re.sub(r'^\d+\.\s+', '', l).replace('\n', ' ') for l in block.split('\n')]
-            lis = [ParentNode('li', text_to_children(item)) for item in items]
-            block_nodes.append(ParentNode('ol', lis))
+            items = [
+                re.sub(r"^\d+\.\s+", "", l).replace("\n", " ")
+                for l in block.split("\n")
+            ]
+            lis = [ParentNode("li", text_to_children(item)) for item in items]
+            block_nodes.append(ParentNode("ol", lis))
 
         else:
             # paragraph: collapse internal newlines to spaces
-            block_nodes.append(ParentNode('p', text_to_children(block.replace('\n', ' '))))
+            block_nodes.append(
+                ParentNode("p", text_to_children(block.replace("\n", " ")))
+            )
 
-    return ParentNode('div', block_nodes)
-
+    return ParentNode("div", block_nodes)
